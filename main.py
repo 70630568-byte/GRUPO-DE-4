@@ -3,18 +3,20 @@ import sys, matplotlib.pyplot as plt, networkx as nx
 from matplotlib.patches import FancyArrowPatch
 
 # === Definición del DFA ===
-states = {"q0","q1","q2","q3","q4"}
-alphabet = {"a","b"}
-delta = {("q0","a"):"q1", 
-        ("q1","a"):"q4", 
-        ("q1","b"):"q4", 
-        ("q2","a"):"q0", 
-        ("q2","b"):"q1", 
-        ("q3","b"):"q2", 
-        ("q4","a"):"q1", 
-        ("q4","b"):"q3"}
+states = {"S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8"}
+alphabet = {"a", "b", "c"}
+delta = {
+    ("S1", "a"): "S2", ("S1", "b"): "S3", ("S1", "c"): "S4",
+    ("S2", "a"): "S5", ("S2", "b"): "S3",
+    ("S3", "a"): "S5", ("S3", "b"): "S4", ("S3", "c"): "S2",
+    ("S4", "a"): "S5", ("S4", "c"): "S3",
+    ("S5", "a"): "S7", ("S5", "b"): "S6",
+    ("S6", "a"): "S5",
+    ("S7", "a"): "S6", ("S7", "b"): "S7",
+    ("S8", "a"): "S1"
+}
 
-q0, F = "q0", {"q4"}
+q0, F = "S1", {"S8"}
 
 # === Simulación ===
 def run(s):
@@ -50,7 +52,7 @@ def draw_step(current, idx, sym=None):
 
 # === core/main ===
 if __name__=='__main__':
-    s = sys.argv[1] if len(sys.argv)>1 else input("Cadena (a/b): ").strip()
+    s = sys.argv[1] if len(sys.argv)>1 else input("Cadena (a/b/c): ").strip()
     try:
         steps, ok = run(s); print("ACEPTA" if ok else "RECHAZA", f"(estado final: {steps[-1]})")
         plt.ion(); draw_step(steps[0],0)
